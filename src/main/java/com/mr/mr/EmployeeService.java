@@ -25,6 +25,10 @@ public class EmployeeService {
 		er.save(emp);
 	}
 
+	public boolean exists(Integer id) {
+		return er.existsById(id);
+	}
+
 	public List<Employee> listAll() {
 		Iterable<Employee> emp = er.findAll();
 		List<Employee> lst = new ArrayList<Employee>();

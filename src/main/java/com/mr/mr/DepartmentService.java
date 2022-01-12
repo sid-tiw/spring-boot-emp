@@ -19,6 +19,10 @@ public class DepartmentService {
 		return ans;
 	}
 
+	public boolean exists(Integer id) {
+		return ds.existsById(id);
+	}
+
 	public void save(Department dept) {
 		ds.save(dept);
 	}

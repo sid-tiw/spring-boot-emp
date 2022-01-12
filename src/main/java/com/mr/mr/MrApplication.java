@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @Controller
@@ -24,6 +23,34 @@ public class MrApplication {
 		SpringApplication.run(MrApplication.class, args);
 	}
 
+	@GetMapping("/login/")
+	public String login(Model md) {
+		md.addAttribute("login", new Login());
+		return "login";
+	}
+
+	@PostMapping("/login/")
+	public String loginPost(Login lg, Model md) {
+		boolean status = emps.exists(lg.eID);
+		if (!status) {
+			md.addAttribute("login", new Login());
+			md.addAttribute("warning", "Wrong Employee ID!! Please check carefully and try again.");
+			return "login";
+		}
+		Employee temp = emps.findByID(lg.eID);
+		if (Hashed.hashIt(lg.passwd).compareTo(temp.getHashed_pass()) != 0) {
+			md.addAttribute("login", new Login());
+			md.addAttribute("warning", "Invalid Password!! Please check carefully and try again.");
+		} else {
+			md.addAttribute("login", new Login());
+			md.addAttribute("warning", "Login successfull!! You can proceed on doing your tasks.");
+		}
+
+		// Generate the jwt token here and send it to the client.
+		// return to home page.
+		return "login";
+	}
+
 	@GetMapping("/admin/manage")
 	public String addEmp(Model md) {
 		md.addAttribute("departments", deps.listAll());
@@ -32,13 +59,14 @@ public class MrApplication {
 	}
 
 	@PostMapping("/admin/manage/")
-	public String addPost(Employee emp) {
-		if (emp == null) System.out.println("Null value!!");
-		else {
-			emps.save(emp);
-			System.out.println(emp.getDOB());
+	public String addPost(Employee emp, Model mdl) {
+		if (emp == null) {
+			System.out.println("Null value!!"); // log the value here (in kafka or whatever)
+			return "error_creation";
 		}
-		return "manage";
+		mdl.addAttribute("passwd", emp.generatePassword());
+		emps.save(emp);
+		return "post_creation";
 	}
 
 	@GetMapping("/check")

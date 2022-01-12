@@ -4,24 +4,31 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Department")
 public class Department {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private String name;
 
-	@OneToMany(mappedBy = "deptID")
+	@OneToMany(targetEntity = Employee.class, mappedBy = "dept")
 	private List<Employee> emp;
 
 	public Department() { }
 
-	public Integer getID() {
+	public void setEmp(List<Employee> emp) {
+		this.emp = emp;
+	}
+
+	public List<Employee> getEmp() {
+		return emp;
+	}
+
+	public Integer getId() {
 		return id;
 	}
 
-	public void setID(Integer id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

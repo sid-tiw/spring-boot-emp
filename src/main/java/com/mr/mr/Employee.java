@@ -4,10 +4,9 @@ import java.sql.Date;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "employee")
 public class Employee {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer eID;
 	private String fname, lname;
 
@@ -15,7 +14,7 @@ public class Employee {
 
 	@ManyToOne
 	@JoinColumn(name = "deptID")
-	private Department deptID;
+	private Department dept;
 
 	public Employee() { }
 
@@ -32,11 +31,11 @@ public class Employee {
 
 	// Getters and Setters from here.
 
-	public Integer getID() {
+	public Integer getEID() {
 		return eID;
 	}
 
-	public void setID(Integer eID) {
+	public void setEID(Integer eID) {
 		this.eID = eID;
 	}
 
@@ -61,11 +60,11 @@ public class Employee {
 	}
 
 	public Department getDept() {
-		return deptID;
+		return dept;
 	}
 
 	public void setDept(Department dept) {
-		this.deptID = dept;
+		this.dept = dept;
 	}
 
 	public Date getDOB() {
